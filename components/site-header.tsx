@@ -59,10 +59,11 @@ export function SiteHeader({ onMenuClick, onLogout, userName }: SiteHeaderProps)
 
           <button
             onClick={onLogout}
-            className="flex items-center justify-center w-10 h-10 text-muted-foreground hover:text-rose-600 bg-card hover:bg-rose-500/10 border-2 border-border hover:border-rose-500/20 rounded-xl transition-all shadow-sm"
+            className="flex items-center gap-2 px-4 h-10 text-sm font-semibold text-muted-foreground hover:text-rose-600 bg-card hover:bg-rose-500/10 border-2 border-border hover:border-rose-500/20 rounded-xl transition-all shadow-sm"
             title="Logout"
           >
-            <LogOut size={20} />
+            <LogOut size={18} />
+            Logout
           </button>
         </div>
       </div>

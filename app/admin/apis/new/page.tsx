@@ -13,7 +13,7 @@ export default function NewApiPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
-  
+
   const [formData, setFormData] = useState({
     name: '',
     endpointUrl: '',
@@ -31,7 +31,7 @@ export default function NewApiPage() {
     setError(null);
 
     const response = await apiClient.createApi(formData as any);
-    
+
     if (response.success && response.data && (response.data as any).id) {
       if (file) {
         const uploadResponse = await apiClient.uploadApiDocs((response.data as any).id, file);
@@ -110,9 +110,10 @@ export default function NewApiPage() {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Documentation (Optional)</label>
+            <label className="block text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Documentation </label>
             <div className="relative">
               <input
+                required
                 type="file"
                 onChange={(e) => setFile(e.target.files?.[0] || null)}
                 className="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl px-6 py-3.5 text-slate-400 text-sm focus:outline-none focus:border-primary transition-all file:bg-primary file:text-white file:font-black file:uppercase file:text-[10px] file:italic file:px-6 file:py-2 file:rounded-xl file:border-0 file:mr-4"
@@ -126,8 +127,8 @@ export default function NewApiPage() {
                 Cancel
               </Button>
             </Link>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={loading}
               className="bg-primary hover:opacity-90 text-white font-black px-8 h-10 rounded-xl uppercase tracking-widest italic shadow-lg shadow-primary/20"
             >

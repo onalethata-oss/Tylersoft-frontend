@@ -22,6 +22,11 @@ interface UIBlock {
     caption: string | null;
     page: number | null;
   } | null;
+  heading?: string | null;
+  width?: number | null;
+  height?: number | null;
+  byte_size?: number | null;
+  content?: string | null;
   metadata?: {
     title: string | null;
     authors: string[] | null;
@@ -200,17 +205,34 @@ export function StructuredDocViewer({ jsonString, fallbackText, apiId }: Structu
               );
 
             case 'image':
+              const imgSrc = block.content || block.image?.src;
+              const imgCaption = block.heading || block.image?.caption;
+              const imgSize = block.byte_size ? `(${(block.byte_size / 1024).toFixed(1)} KB)` : '';
+              const imgDims = block.width && block.height ? `${block.width}×${block.height}px` : '';
+
               return (
                 <figure key={block.id} className="my-8 group">
-                  <div className="aspect-video bg-muted/20 rounded-2xl border border-dashed border-border/40 flex flex-col items-center justify-center relative overflow-hidden transition-all group-hover:border-primary/30">
-                    <ImageIcon size={32} className="text-muted-foreground/10" />
-                    {block.image?.src && (
-                      <img src={block.image.src} alt={block.image.caption || ''} className="absolute inset-0 w-full h-full object-cover" />
+                  <div className="bg-muted/10 rounded-3xl border-2 border-border/50 flex flex-col items-center justify-center relative overflow-hidden transition-all group-hover:border-primary/40 shadow-sm">
+                    {imgSrc ? (
+                      <div className="w-full flex flex-col items-center">
+                        <img src={imgSrc} alt={imgCaption || ''} className="max-w-full h-auto object-contain bg-white/50" />
+                        <div className="absolute top-4 right-4 flex gap-2">
+                           {imgDims && <span className="bg-background/80 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-black italic border border-border shadow-sm">{imgDims}</span>}
+                           {imgSize && <span className="bg-background/80 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-black italic border border-border shadow-sm">{imgSize}</span>}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="aspect-video w-full flex flex-col items-center justify-center border-2 border-dashed border-border/40">
+                        <ImageIcon size={32} className="text-muted-foreground/20" />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40 mt-4 italic">Visual Asset Stream Offline</span>
+                      </div>
                     )}
                   </div>
-                  {block.image?.caption && (
-                    <figcaption className="mt-3 text-center text-[10px] font-bold text-muted-foreground italic uppercase tracking-tighter opacity-50">
-                      Fig: {block.image.caption}
+                  {imgCaption && (
+                    <figcaption className="mt-4 text-center">
+                      <div className="inline-flex items-center gap-2 px-6 py-2 bg-background border border-border rounded-full shadow-sm">
+                        <span className="text-[11px] font-bold text-foreground/70 italic">{imgCaption}</span>
+                      </div>
                     </figcaption>
                   )}
                 </figure>
